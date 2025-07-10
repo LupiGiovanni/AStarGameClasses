@@ -108,3 +108,6 @@ int main () {
 
     return 0;
 }
+
+//TODO sistemare la const correctness
+//TODO scrivere file README.md
