@@ -4,4 +4,6 @@ project(AStarGameClasses)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(AStarGameClasses main.cpp
-        stlastar.h)
+        stlastar.h
+        Node.cpp
+        Node.h)
