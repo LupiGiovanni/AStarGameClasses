@@ -28,7 +28,10 @@ std::vector<Node> search (Node& nodeStart, Node& nodeGoal) {
     return path;
 }
 
-void displayPath (int* map, int width, int height, const std::vector<Node>& path) {
+bool displayPath (int* map, int width, int height, const std::vector<Node>& path) {
+    if (path.empty())
+        return false;
+
     Node nodeStart = path.front();
     Node nodeGoal = path.back();
 
@@ -57,6 +60,7 @@ void displayPath (int* map, int width, int height, const std::vector<Node>& path
         }
         std::cout << std::endl;
     }
+    return true;
 }
 
 void dislayMap (int* map, int width, int height) {
@@ -101,7 +105,7 @@ int main () {
 
     // Set up start and goal nodes
     Node nodeStart (0, 0);
-    Node nodeGoal (15, 6);
+    Node nodeGoal (4, 6);
 
     // Perform the search
     displayPath(global_map, map_width, map_height, search(nodeStart, nodeGoal));
