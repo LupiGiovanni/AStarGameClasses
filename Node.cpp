@@ -85,3 +85,11 @@ size_t Node::Hash() {
 void Node::PrintNodeInfo() {
     std::cout << "Node position: (" << x << ", " << y << ")" << std::endl;
 }
+
+int Node::getX() const {
+    return x;
+}
+
+int Node::getY() const {
+    return y;
+}

@@ -24,6 +24,8 @@ public:
     size_t Hash();
 
     void PrintNodeInfo();
+    int getX() const;
+    int getY() const;
 
 private:
     int x;

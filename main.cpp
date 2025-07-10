@@ -2,11 +2,11 @@
 #include "Node.h"
 #include "stlastar.h"
 
-bool search (Node& nodeStart, Node& nodeGoal) {
+std::vector<Node> search (Node& nodeStart, Node& nodeGoal) {
     AStarSearch<Node> astarsearch;
     astarsearch.SetStartAndGoalStates(nodeStart, nodeGoal);
-
     unsigned int searchState;
+    std::vector<Node> path = {};
 
     do {
         searchState = astarsearch.SearchStep();
@@ -16,7 +16,7 @@ bool search (Node& nodeStart, Node& nodeGoal) {
         std::cout << "Search succeeded" << std::endl;
         Node* node = astarsearch.GetSolutionStart();
         while (node != nullptr) {
-            node->PrintNodeInfo();
+            path.push_back(*node);
             node = astarsearch.GetSolutionNext();
         }
         astarsearch.FreeSolutionNodes();
@@ -25,10 +25,38 @@ bool search (Node& nodeStart, Node& nodeGoal) {
     }
 
     astarsearch.EnsureMemoryFreed();
+    return path;
+}
 
-    if (searchState == AStarSearch<Node>::SEARCH_STATE_SUCCEEDED)
-        return true;
-    return false;
+void displayPath (int* map, int width, int height, const std::vector<Node>& path) {
+    Node nodeStart = path.front();
+    Node nodeGoal = path.back();
+
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            bool isPath = false;
+            for (auto it = path.begin(); it != path.end(); ++it) {
+                if (it->getX() == x && it->getY() == y) {
+                    if (it == path.begin()) {
+                        std::cout << "S  ";
+                    } else if (it == path.end() - 1) {
+                        std::cout << "G  ";
+                    } else {
+                        std::cout << "*  ";
+                    }
+                    isPath = true;
+                    break;
+                }
+            }
+            if (!isPath) {
+                if (map[y * width + x] == 9)
+                    std::cout << "#  ";
+                else if (map[y * width + x] < 9)
+                    std::cout << ".  ";
+            }
+        }
+        std::cout << std::endl;
+    }
 }
 
 void dislayMap (int* map, int width, int height) {
@@ -70,14 +98,13 @@ int main () {
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,   // 19
     };
     Node::setGlobalMap(global_map, map_width, map_height);
-    dislayMap(global_map, map_width, map_height);
 
     // Set up start and goal nodes
     Node nodeStart (0, 0);
     Node nodeGoal (15, 6);
 
     // Perform the search
-    search(nodeStart, nodeGoal);
+    displayPath(global_map, map_width, map_height, search(nodeStart, nodeGoal));
 
     return 0;
 }
